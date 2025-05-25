@@ -1,40 +1,53 @@
 {
-  name: Go Dependency Submission
-on:
-  push:
-    branches:
-      - main
-
-# The API requires write permission on the repository to submit dependencies
-permissions:
-  contents: write
-
-# Environment variables to configure Go and Go modules. Customize as necessary
-env:
-  GOPROXY: '' # A Go Proxy server to be used
-  GOPRIVATE: '' # A list of modules are considered private and not requested from GOPROXY
-jobs:
-  go-action-detection:
-    runs-on: ubuntu-latest
-    steps:
-      - name: 'Checkout Repository'
-        uses: actions/checkout@v4
-
-      - uses: actions/setup-go@v5
-        with:
-          go-version: ">=1.18.0"
-
-      - name: Run snapshot action
-        uses: actions/go-dependency-submission@v1
-        with:
-            # Required: Define the repo path to the go.mod file used by the
-            # build target
-            go-mod-path: go-example/go.mod
-            #
-            # Optional. Define the repo path of a build target,
-            # a file with a `main()` function.
-            # If undefined, this action will collect all dependencies
-            # used by all build targets for the module. This may
-            # include Go dependencies used by tests and tooling.
-            go-build-target: go-example/cmd/octocat.go
+  "name": "go-dependency-submission",
+  "version": "2.0.3",
+  "description": "Go Dependency Submission",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "format": "npx prettier --write '**/*.ts'",
+    "format-check": "npx prettier --check '**/*.ts'",
+    "lint": "eslint --fix src/**/*.ts",
+    "package": "ncc build --source-map --license licenses.txt",
+    "test": "jest --testTimeout=10000",
+    "test:watch": "jest --watch src",
+    "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/actions/go-dependency-submission.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/actions/go-dependency-submission/issues"
+  },
+  "homepage": "https://github.com/actions/go-dependency-submission#readme",
+  "devDependencies": {
+    "@babel/core": "^7.26.10",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-typescript": "^7.27.0",
+    "@types/jest": "^27.5.2",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "@typescript-eslint/parser": "^5.20.0",
+    "@vercel/ncc": "^0.33.4",
+    "babel-jest": "^29.7.0",
+    "eslint": "^8.13.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^26.5.3",
+    "eslint-plugin-n": "^15.1.0",
+    "eslint-plugin-promise": "^6.0.0",
+    "prettier": "^3.5.3",
+    "ts-jest": "^29.0.0",
+    "typescript": "^4.6.4"
+  },
+  "dependencies": {
+    "@actions/core": "^1.9.1",
+    "@actions/exec": "^1.1.1",
+    "@actions/github": "^6.0.0",
+    "@github/dependency-submission-toolkit": "^2.0.5",
+    "packageurl-js": "^0.0.6"
+  }
 }
